@@ -12,6 +12,7 @@ declare global {
 
 export type AuthStackParamList = {
   Root: undefined;
+  AddWish: undefined;
   pickRegion: undefined;
   signin: undefined;
 };

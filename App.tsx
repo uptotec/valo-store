@@ -7,6 +7,7 @@ import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import * as SplashScreen from 'expo-splash-screen';
 import { refreshAccessToken } from './api';
+import * as SQLite from 'expo-sqlite';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -19,6 +20,13 @@ export default function App() {
   useEffect(() => {
     async function prepare() {
       try {
+        const db = SQLite.openDatabase('db.db');
+
+        db.transaction((tx) => {
+          tx.executeSql(
+            'create table if not exists wishlist (id integer primary key not null, puuid text, uuid text);'
+          );
+        });
         await refreshAccessToken();
       } catch (e) {
         console.warn(e);

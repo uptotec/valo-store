@@ -2,11 +2,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { useAuthStore } from '../store/auth.store';
 import { AuthStackParamList } from '../types';
-import TabOneScreen from '../screens/TabOneScreen';
 import PickRegion from '../screens/auth/pickRegion';
 import Colors from '../constants/Colors';
 import SignIn from '../screens/auth/signin';
 import TabNavigator from './tabNavigation';
+import AddWishScreen from '../screens/addWish';
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 
@@ -17,11 +17,18 @@ export default function AuthNavigator() {
     return (
       <Stack.Navigator
         screenOptions={{
-          headerShown: false,
           navigationBarColor: Colors.dark.main,
+          headerStyle: { backgroundColor: Colors.dark.main },
         }}
       >
-        <Stack.Screen name="Root" component={TabNavigator} />
+        <Stack.Screen
+          name="Root"
+          component={TabNavigator}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen name="AddWish" component={AddWishScreen} />
       </Stack.Navigator>
     );
   }

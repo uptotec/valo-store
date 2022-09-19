@@ -7,12 +7,14 @@ import { useThemeColor } from '../components/Themed';
 import StoreScreen from '../screens/store';
 import WishListScreen from '../screens/wishlist';
 import ProfileScreen from '../screens/profile';
+import { TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator<TabStackParamList>();
 
 export default function TabNavigator() {
-  const tabColorDefault = useThemeColor({}, 'tabIconDefault');
   const tabColorFocused = useThemeColor({}, 'tabIconSelected');
+  const navigation = useNavigation();
 
   return (
     <Tab.Navigator
@@ -39,6 +41,14 @@ export default function TabNavigator() {
           title: 'Your Wishlist',
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="star" size={size} color={color} />
+          ),
+          headerRight: ({ tintColor }) => (
+            <TouchableOpacity
+              style={{ marginRight: 15, padding: 5 }}
+              onPress={() => navigation.navigate('AddWish' as never)}
+            >
+              <FontAwesome name="plus" size={24} color="white" />
+            </TouchableOpacity>
           ),
         }}
       />
