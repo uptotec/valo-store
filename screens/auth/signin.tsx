@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, Platform } from 'react-native';
 
 import { Text, View } from '../../components/Themed';
 import { WebView, WebViewNavigation } from 'react-native-webview';
@@ -18,8 +18,15 @@ export default function SignIn() {
       navigationState.url.includes('access_token') &&
       !signedIn
     ) {
+      console.log(navigationState.url);
       console.log('signedin');
       setSignedIn(true);
+      if (Platform.OS === 'ios') {
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        setSignedIn(false);
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        setSignedIn(true);
+      }
       await refreshAccessToken();
     }
   };
@@ -33,7 +40,12 @@ export default function SignIn() {
             width: Dimensions.get('window').width,
             height: Dimensions.get('window').width,
           }}
-          // sharedCookiesEnabled
+          userAgent={
+            Platform.OS === 'android'
+              ? 'Chrome/18.0.1025.133 Mobile Safari/535.19'
+              : 'AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75'
+          }
+          sharedCookiesEnabled
         />
       )}
     </View>

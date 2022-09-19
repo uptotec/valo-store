@@ -45,8 +45,8 @@ export default function App() {
   } else {
     return (
       <SafeAreaProvider onLayout={onLayoutRootView}>
-        <Navigation colorScheme={colorScheme} />
-        <StatusBar />
+        <Navigation colorScheme="dark" />
+        <StatusBar style="light" />
       </SafeAreaProvider>
     );
   }

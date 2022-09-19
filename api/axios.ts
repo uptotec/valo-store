@@ -40,6 +40,8 @@ export const refreshAccessToken = async () => {
     }
   );
 
+  // console.log(res.data);
+
   if (!res.data?.response?.parameters?.uri) {
     useAuthStore.setState({
       isSignedIn: false,
