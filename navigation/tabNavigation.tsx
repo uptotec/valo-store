@@ -3,12 +3,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { TabStackParamList } from '../types';
 import Colors from '../constants/Colors';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
-import { useThemeColor } from '../components/Themed';
+import { Text, useThemeColor } from '../components/Themed';
 import StoreScreen from '../screens/store';
 import WishListScreen from '../screens/wishlist';
 import ProfileScreen from '../screens/profile';
 import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { signOut } from '../api/axios';
 
 const Tab = createBottomTabNavigator<TabStackParamList>();
 
@@ -59,6 +60,14 @@ export default function TabNavigator() {
           title: 'YourProfile',
           tabBarIcon: ({ color, size }) => (
             <FontAwesome5 name="user-alt" size={size} color={color} />
+          ),
+          headerRight: ({ tintColor }) => (
+            <TouchableOpacity
+              style={{ marginRight: 15, padding: 5 }}
+              onPress={signOut}
+            >
+              <Text>Signout</Text>
+            </TouchableOpacity>
           ),
         }}
       />

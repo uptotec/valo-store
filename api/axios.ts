@@ -28,8 +28,20 @@ function getTokenDataFromURL(url: string) {
   };
 }
 
+export const signOut = async () => {
+  await axios.get('https://auth.riotgames.com/logout');
+
+  useAuthStore.setState({
+    isSignedIn: false,
+    accessToken: null,
+    entitlementsToken: null,
+    expiresIn: null,
+    puuid: null,
+    date: null,
+  });
+};
+
 export const refreshAccessToken = async () => {
-  // const x = await axios.get('https://auth.riotgames.com/logout');
   const res = await axios.post(
     'https://auth.riotgames.com/api/v1/authorization',
     {

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Dimensions, FlatList } from 'react-native';
 import axios from 'axios';
+import * as SecureStore from 'expo-secure-store';
 
 import { View } from '../components/Themed';
 import { Axios } from '../api/axios';
@@ -15,8 +16,14 @@ export default function StoreScreen() {
 
   useEffect(() => {
     const getStore = async () => {
+      const region = await SecureStore.getItemAsync('region');
+
       const store = await Axios.get(
-        `https://pd.eu.a.pvp.net/store/v2/storefront/${puuid}`
+        `https://pd.${region}.a.pvp.net/store/v2/storefront/${puuid}`
+      );
+
+      const storePrices = await Axios.get(
+        `https://pd.${region}.a.pvp.net/store/v1/offers/`
       );
 
       const dailyStore = [];
@@ -25,13 +32,19 @@ export default function StoreScreen() {
         const res = await axios.get(
           `https://valorant-api.com/v1/weapons/skinlevels/${item}`
         );
+        const price = storePrices.data.Offers.find(
+          (offer: any) => offer.OfferID === item
+        );
+
         dailyStore.push({
           displayName: res.data.data.displayName,
           displayIcon: res.data.data.displayIcon,
           uuid: res.data.data.uuid,
           levels: null,
+          price: Object.values(price.Cost)[0] as number,
         });
       }
+
       setStore(dailyStore);
     };
     getStore();
@@ -51,7 +64,6 @@ export default function StoreScreen() {
             />
           )}
           keyExtractor={(item) => item.uuid}
-          // ItemSeparatorComponent={() => <View style={styles.separator} />}
         />
       )}
     </View>
