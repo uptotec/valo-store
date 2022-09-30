@@ -4,7 +4,6 @@ import axios from 'axios';
 import * as SQLite from 'expo-sqlite';
 
 import { Text, View } from '../components/Themed';
-import { Axios } from '../api/axios';
 import { useAuthStore } from '../store/auth.store';
 import skin from '../constants/skin';
 import Colors from '../constants/Colors';

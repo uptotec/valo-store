@@ -65,6 +65,8 @@ export default function AddWishScreen() {
       return;
     }
 
+    console.log(item.levels![0].uuid);
+
     await new Promise(async (resolve) =>
       db.transaction((tx) => {
         tx.executeSql(

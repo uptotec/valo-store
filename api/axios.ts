@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useAuthStore } from '../store/auth.store';
-
+import parse, { splitCookiesString } from 'set-cookie-parser';
 export type ApiResponse<T> =
   | {
       isSuccessful: false;
@@ -52,7 +52,7 @@ export const refreshAccessToken = async () => {
     }
   );
 
-  // console.log(res.data);
+  // console.log(parse(splitCookiesString(res.headers['set-cookie']![0])));
 
   if (!res.data?.response?.parameters?.uri) {
     useAuthStore.setState({
@@ -63,7 +63,8 @@ export const refreshAccessToken = async () => {
       puuid: null,
       date: null,
     });
-    return;
+
+    return null;
   }
 
   const token = getTokenDataFromURL(res.data.response.parameters.uri);
@@ -82,6 +83,7 @@ export const refreshAccessToken = async () => {
 
   token.puuid = player.data.sub;
 
+  // console.log(token);
   console.log('refreshed');
 
   useAuthStore.setState({
@@ -89,6 +91,12 @@ export const refreshAccessToken = async () => {
     date: Date.now(),
     ...token,
   });
+
+  return {
+    isSignedIn: true,
+    date: Date.now(),
+    ...token,
+  };
 };
 
 export const Axios = axios.create({

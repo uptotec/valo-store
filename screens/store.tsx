@@ -1,53 +1,22 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Dimensions, FlatList } from 'react-native';
-import axios from 'axios';
-import * as SecureStore from 'expo-secure-store';
 
 import { View } from '../components/Themed';
-import { Axios } from '../api/axios';
+
 import { useAuthStore } from '../store/auth.store';
 import skin from '../constants/skin';
 import Colors from '../constants/Colors';
 import SkinCard from '../components/card';
+import { getStore } from '../api/store';
 
 export default function StoreScreen() {
   const puuid = useAuthStore((state) => state.puuid);
   const [store, setStore] = useState<skin[] | null>(null);
 
   useEffect(() => {
-    const getStore = async () => {
-      const region = await SecureStore.getItemAsync('region');
-
-      const store = await Axios.get(
-        `https://pd.${region}.a.pvp.net/store/v2/storefront/${puuid}`
-      );
-
-      const storePrices = await Axios.get(
-        `https://pd.${region}.a.pvp.net/store/v1/offers/`
-      );
-
-      const dailyStore = [];
-
-      for (const item of store.data.SkinsPanelLayout.SingleItemOffers) {
-        const res = await axios.get(
-          `https://valorant-api.com/v1/weapons/skinlevels/${item}`
-        );
-        const price = storePrices.data.Offers.find(
-          (offer: any) => offer.OfferID === item
-        );
-
-        dailyStore.push({
-          displayName: res.data.data.displayName,
-          displayIcon: res.data.data.displayIcon,
-          uuid: res.data.data.uuid,
-          levels: null,
-          price: Object.values(price.Cost)[0] as number,
-        });
-      }
-
-      setStore(dailyStore);
-    };
-    getStore();
+    (async () => {
+      setStore(await getStore(puuid!));
+    })();
   }, []);
 
   return (

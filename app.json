@@ -21,12 +21,18 @@
     "ios": {
       "supportsTablet": true
     },
+    "plugins": [
+      [
+        "expo-notifications"
+      ]
+    ],
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.uptotec.valostore"
+      "package": "com.uptotec.valostore",
+      "useNextNotificationsApi": true
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

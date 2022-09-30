@@ -5,10 +5,11 @@ import { WebView, WebViewNavigation } from 'react-native-webview';
 import { refreshAccessToken } from '../../api';
 import { useState } from 'react';
 
+const signInUrl =
+  'https://auth.riotgames.com/authorize?redirect_uri=https%3A%2F%2Fplayvalorant.com%2Fopt_in%2F&client_id=play-valorant-web-prod&response_type=token%20id_token&nonce=1&scope=account%20openid';
+
 export default function SignIn() {
   const [signedIn, setSignedIn] = useState(false);
-  const signInUrl =
-    'https://auth.riotgames.com/authorize?redirect_uri=https%3A%2F%2Fplayvalorant.com%2Fopt_in%2F&client_id=play-valorant-web-prod&response_type=token%20id_token&nonce=1&scope=account%20openid';
 
   const onNavigationStateChange = async (
     navigationState: WebViewNavigation
@@ -18,7 +19,6 @@ export default function SignIn() {
       navigationState.url.includes('access_token') &&
       !signedIn
     ) {
-      console.log(navigationState.url);
       console.log('signedin');
       setSignedIn(true);
       if (Platform.OS === 'ios') {
