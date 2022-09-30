@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Dimensions, FlatList } from 'react-native';
+import {
+  StyleSheet,
+  Dimensions,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
 import axios from 'axios';
 import * as SQLite from 'expo-sqlite';
 
@@ -14,6 +19,7 @@ export default function WishListScreen() {
   const navigation = useNavigation();
   const puuid = useAuthStore((state) => state.puuid);
   const [wishList, setWishList] = useState<skin[] | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const getStore = async () => {
@@ -43,6 +49,7 @@ export default function WishListScreen() {
         });
       }
       setWishList(list);
+      setLoading(false);
     };
 
     const willFocusWishlist = navigation.addListener('focus', () => {
@@ -67,6 +74,13 @@ export default function WishListScreen() {
       })
     );
   };
+
+  if (loading)
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#fff" />
+      </View>
+    );
 
   return (
     <View style={styles.container}>
@@ -98,6 +112,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
     fontSize: 20,

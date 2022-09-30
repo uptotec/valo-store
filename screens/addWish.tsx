@@ -1,6 +1,12 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Dimensions, FlatList, StyleSheet, TextInput } from 'react-native';
+import {
+  ActivityIndicator,
+  Dimensions,
+  FlatList,
+  StyleSheet,
+  TextInput,
+} from 'react-native';
 import SkinCard from '../components/card';
 import * as SQLite from 'expo-sqlite';
 import { useNavigation } from '@react-navigation/native';
@@ -15,6 +21,7 @@ export default function AddWishScreen() {
   const [skins, setSkins] = useState<skin[] | null>(null);
   const [search, setSearch] = useState<skin[] | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true);
   const puuid = useAuthStore((state) => state.puuid);
   const navigation = useNavigation();
 
@@ -24,6 +31,7 @@ export default function AddWishScreen() {
 
       setSkins(list.data.data);
       setSearch(list.data.data);
+      setLoading(false);
     };
     getSkins();
   }, []);
@@ -65,8 +73,6 @@ export default function AddWishScreen() {
       return;
     }
 
-    console.log(item.levels![0].uuid);
-
     await new Promise(async (resolve) =>
       db.transaction((tx) => {
         tx.executeSql(
@@ -89,22 +95,29 @@ export default function AddWishScreen() {
         onChangeText={(text) => setSearchQuery(text)}
         value={searchQuery}
         placeholder="Search Skin"
+        editable={!loading}
       />
-      <FlatList
-        style={styles.list}
-        data={search}
-        renderItem={(props) => (
-          <SkinCard
-            {...props}
-            showButtonAdd={true}
-            onPressAdd={addToWishlist}
-            showButtonRemove={false}
-          />
-        )}
-        keyExtractor={(item) => item.uuid}
-        initialNumToRender={20}
-        maxToRenderPerBatch={10}
-      />
+      {loading ? (
+        <View style={styles.container}>
+          <ActivityIndicator size="large" color="#fff" />
+        </View>
+      ) : (
+        <FlatList
+          style={styles.list}
+          data={search}
+          renderItem={(props) => (
+            <SkinCard
+              {...props}
+              showButtonAdd={true}
+              onPressAdd={addToWishlist}
+              showButtonRemove={false}
+            />
+          )}
+          keyExtractor={(item) => item.uuid}
+          initialNumToRender={20}
+          maxToRenderPerBatch={10}
+        />
+      )}
     </View>
   );
 }

@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Dimensions, FlatList } from 'react-native';
+import {
+  StyleSheet,
+  Dimensions,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
 
 import { View } from '../components/Themed';
 
@@ -12,12 +17,21 @@ import { getStore } from '../api/store';
 export default function StoreScreen() {
   const puuid = useAuthStore((state) => state.puuid);
   const [store, setStore] = useState<skin[] | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     (async () => {
       setStore(await getStore(puuid!));
+      setLoading(false);
     })();
   }, []);
+
+  if (loading)
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#fff" />
+      </View>
+    );
 
   return (
     <View style={styles.container}>
@@ -42,6 +56,8 @@ export default function StoreScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
     fontSize: 20,
