@@ -115,10 +115,14 @@ Axios.interceptors.request.use(async function (config) {
     if (config.headers) {
       config.headers['Authorization'] = `Bearer ${authState.accessToken}`;
       config.headers['X-Riot-Entitlements-JWT'] = authState.entitlementsToken;
+      config.headers['X-Riot-ClientPlatform'] =
+        'ew0KCSJwbGF0Zm9ybVR5cGUiOiAiUEMiLA0KCSJwbGF0Zm9ybU9TIjogIldpbmRvd3MiLA0KCSJwbGF0Zm9ybU9TVmVyc2lvbiI6ICIxMC4wLjE5MDQyLjEuMjU2LjY0Yml0IiwNCgkicGxhdGZvcm1DaGlwc2V0IjogIlVua25vd24iDQp9';
     } else {
       config.headers = {
         Authorization: `Bearer ${authState.accessToken}`,
         'X-Riot-Entitlements-JWT': authState.entitlementsToken,
+        'X-Riot-ClientPlatform':
+          'ew0KCSJwbGF0Zm9ybVR5cGUiOiAiUEMiLA0KCSJwbGF0Zm9ybU9TIjogIldpbmRvd3MiLA0KCSJwbGF0Zm9ybU9TVmVyc2lvbiI6ICIxMC4wLjE5MDQyLjEuMjU2LjY0Yml0IiwNCgkicGxhdGZvcm1DaGlwc2V0IjogIlVua25vd24iDQp9',
       };
     }
     return config;
@@ -130,10 +134,14 @@ Axios.interceptors.request.use(async function (config) {
     config.headers['Authorization'] = `Bearer ${newAccessToken.accessToken}`;
     config.headers['X-Riot-Entitlements-JWT'] =
       newAccessToken.entitlementsToken as any;
+    config.headers['X-Riot-ClientPlatform'] =
+      'ew0KCSJwbGF0Zm9ybVR5cGUiOiAiUEMiLA0KCSJwbGF0Zm9ybU9TIjogIldpbmRvd3MiLA0KCSJwbGF0Zm9ybU9TVmVyc2lvbiI6ICIxMC4wLjE5MDQyLjEuMjU2LjY0Yml0IiwNCgkicGxhdGZvcm1DaGlwc2V0IjogIlVua25vd24iDQp9';
   } else {
     config.headers = {
       Authorization: `Bearer ${newAccessToken.accessToken}`,
       'X-Riot-Entitlements-JWT': newAccessToken.entitlementsToken as any,
+      'X-Riot-ClientPlatform':
+        'ew0KCSJwbGF0Zm9ybVR5cGUiOiAiUEMiLA0KCSJwbGF0Zm9ybU9TIjogIldpbmRvd3MiLA0KCSJwbGF0Zm9ybU9TVmVyc2lvbiI6ICIxMC4wLjE5MDQyLjEuMjU2LjY0Yml0IiwNCgkicGxhdGZvcm1DaGlwc2V0IjogIlVua25vd24iDQp9',
     };
   }
   return config;
