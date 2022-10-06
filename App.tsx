@@ -15,6 +15,7 @@ import backgroundTask, {
 import triggernewStoreNotification from './services/newStoreNotification';
 import prepareApp from './services/prepareApp';
 import checkNotificationPermisions from './services/notificationsPermissions';
+import { Linking, NativeModules } from 'react-native';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 

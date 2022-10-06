@@ -28,6 +28,7 @@
     "expo-device": "~4.3.0",
     "expo-file-system": "~14.1.0",
     "expo-font": "~10.2.0",
+    "expo-intent-launcher": "~10.3.0",
     "expo-linking": "~3.2.2",
     "expo-notifications": "~0.16.1",
     "expo-permissions": "~13.2.0",

@@ -4,6 +4,8 @@ import {
   Dimensions,
   FlatList,
   ActivityIndicator,
+  TouchableOpacity,
+  Linking,
 } from 'react-native';
 import axios from 'axios';
 import * as SQLite from 'expo-sqlite';
@@ -90,9 +92,20 @@ export default function WishListScreen() {
           style={styles.list}
           data={wishList}
           ListEmptyComponent={() => (
-            <Text style={[styles.title, { margin: 20 }]}>
+            <Text style={[styles.title, { margin: 20, alignSelf: 'center' }]}>
               Your Wishlist Is Empty
             </Text>
+          )}
+          ListFooterComponent={() => (
+            <>
+              <Text>
+                Allow the app to run in the background to function as expected
+                change app battery settings to unrestricted{'   '}
+                <TouchableOpacity onPress={() => Linking.openSettings()}>
+                  <Text style={{ color: 'skyblue' }}>open app settings</Text>
+                </TouchableOpacity>
+              </Text>
+            </>
           )}
           renderItem={(props) => (
             <SkinCard
