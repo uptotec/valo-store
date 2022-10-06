@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "valo-store",
+    "name": "valo store",
     "slug": "valo-store",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#13141c"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -29,13 +29,18 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#13141c"
       },
       "package": "com.uptotec.valostore",
       "useNextNotificationsApi": true
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "5d8db270-9640-4bea-9e3f-572595da1d05"
+      }
     }
   }
 }

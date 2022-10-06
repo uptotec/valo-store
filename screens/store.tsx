@@ -6,7 +6,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import { View } from '../components/Themed';
+import { Text, View } from '../components/Themed';
 
 import { useAuthStore } from '../store/auth.store';
 import skin from '../constants/skin';
@@ -29,7 +29,8 @@ export default function StoreScreen() {
   if (loading)
     return (
       <View style={styles.container}>
-        <ActivityIndicator size="large" color="#fff" />
+        <ActivityIndicator size={55} color="#fff" />
+        <Text>loading store...</Text>
       </View>
     );
 

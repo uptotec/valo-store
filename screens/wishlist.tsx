@@ -78,7 +78,8 @@ export default function WishListScreen() {
   if (loading)
     return (
       <View style={styles.container}>
-        <ActivityIndicator size="large" color="#fff" />
+        <ActivityIndicator size={55} color="#fff" />
+        <Text>loading wishlist...</Text>
       </View>
     );
 

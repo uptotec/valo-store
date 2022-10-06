@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useAuthStore } from '../store/auth.store';
-import parse, { splitCookiesString } from 'set-cookie-parser';
+
 export type ApiResponse<T> =
   | {
       isSuccessful: false;

@@ -57,7 +57,7 @@ export default function TabNavigator() {
         name="Profile"
         component={ProfileScreen}
         options={{
-          title: 'YourProfile',
+          title: 'Your Profile',
           tabBarIcon: ({ color, size }) => (
             <FontAwesome5 name="user-alt" size={size} color={color} />
           ),

@@ -99,11 +99,11 @@ export default function AddWishScreen() {
       />
       {loading ? (
         <View style={styles.container}>
-          <ActivityIndicator size="large" color="#fff" />
+          <ActivityIndicator size={55} color="#fff" />
+          <Text>loading skins...</Text>
         </View>
       ) : (
         <FlatList
-          style={styles.list}
           data={search}
           renderItem={(props) => (
             <SkinCard
@@ -137,7 +137,6 @@ const styles = StyleSheet.create({
     height: 1,
     width: '80%',
   },
-  list: {},
   input: {
     height: 40,
     width: Dimensions.get('window').width - 10,
