@@ -1,11 +1,12 @@
 import * as SQLite from 'expo-sqlite';
+import NetInfo from '@react-native-community/netinfo';
+
 import { refreshAccessToken } from '../api/axios';
 
 export default async function prepareApp(setAppIsReady: (x: boolean) => void) {
   try {
-    // const resetdb = SQLite.openDatabase('db.db');
-    // resetdb.closeAsync();
-    // resetdb.deleteAsync();
+    const connected = await NetInfo.fetch();
+    if (!connected.isConnected || !connected.isConnected) return;
 
     const db = SQLite.openDatabase('db.db');
 

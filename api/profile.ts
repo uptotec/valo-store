@@ -21,7 +21,6 @@ export default async function getProfile(puuid: string) {
   const [wallet, accountXP, player] = await Promise.all([w, xp, p]);
 
   const regionLable = regions.find((r) => r.value === region);
-  console.log(player.data);
 
   return {
     valorantPoints:

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import * as TaskManager from 'expo-task-manager';
 import * as Notifications from 'expo-notifications';
+import NetInfo from '@react-native-community/netinfo';
 
 import useCachedResources from './hooks/useCachedResources';
 import Navigation from './navigation';
@@ -15,7 +16,8 @@ import backgroundTask, {
 import triggernewStoreNotification from './services/newStoreNotification';
 import prepareApp from './services/prepareApp';
 import checkNotificationPermisions from './services/notificationsPermissions';
-import { Linking, NativeModules } from 'react-native';
+import { Alert } from 'react-native';
+import { reloadAsync } from 'expo-updates';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -34,11 +36,22 @@ export default function App() {
 
   const [appIsReady, setAppIsReady] = useState(false);
 
+  NetInfo.addEventListener((status) => {
+    if (!status.isConnected || !status.isInternetReachable) {
+      Alert.alert(
+        'No Internet Connection',
+        'your device is not connected to the internet. Reconnect and try again!',
+        [{ text: 'try again', onPress: () => reloadAsync() }]
+      );
+      return;
+    }
+  });
+
   useEffect(() => {
-    prepareApp(setAppIsReady);
     checkNotificationPermisions();
     checkBackgroundTaskStatusAsync();
     triggernewStoreNotification();
+    prepareApp(setAppIsReady);
   }, []);
 
   const onLayoutRootView = useCallback(async () => {

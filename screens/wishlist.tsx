@@ -98,7 +98,7 @@ export default function WishListScreen() {
           )}
           ListFooterComponent={() => (
             <>
-              <Text>
+              <Text style={{ marginVertical: 5 }}>
                 Allow the app to run in the background to function as expected
                 change app battery settings to unrestricted{'   '}
                 <TouchableOpacity onPress={() => Linking.openSettings()}>
