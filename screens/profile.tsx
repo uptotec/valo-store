@@ -1,4 +1,10 @@
-import { ActivityIndicator, Image, ScrollView, StyleSheet } from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+} from 'react-native';
 import { Divider, LinearProgress } from '@rneui/base';
 import { useEffect, useState } from 'react';
 
@@ -24,11 +30,16 @@ type profile = {
 export default function ProfileScreen() {
   const puuid = useAuthStore((state) => state.puuid);
   const [profile, setProfile] = useState<profile | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const getprofileAPI = async () => {
+    setRefreshing(true);
+    setProfile(await getProfile(puuid!));
+    setRefreshing(false);
+  };
 
   useEffect(() => {
-    (async () => {
-      setProfile(await getProfile(puuid!));
-    })();
+    (async () => setProfile(await getProfile(puuid!)))();
   }, []);
 
   if (!profile)
@@ -45,7 +56,12 @@ export default function ProfileScreen() {
     );
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={getprofileAPI} />
+      }
+    >
       {profile.name ? (
         <View style={styles.rankView}>
           <Image
