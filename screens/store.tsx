@@ -5,6 +5,11 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
+import {
+  BannerAd,
+  BannerAdSize,
+  TestIds,
+} from 'react-native-google-mobile-ads';
 
 import { Text, View } from '../components/Themed';
 
@@ -13,6 +18,14 @@ import skin from '../constants/skin';
 import Colors from '../constants/Colors';
 import SkinCard from '../components/card';
 import { getStore } from '../api/store';
+
+const storeAd1 = __DEV__
+  ? TestIds.BANNER
+  : 'ca-app-pub-8907112768449568/2459593177';
+
+const storeAd2 = __DEV__
+  ? TestIds.BANNER
+  : 'ca-app-pub-8907112768449568/7328776472';
 
 export default function StoreScreen() {
   const puuid = useAuthStore((state) => state.puuid);
@@ -26,30 +39,37 @@ export default function StoreScreen() {
     })();
   }, []);
 
-  if (loading)
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size={55} color="#fff" />
-        <Text>loading store...</Text>
-      </View>
-    );
+  const LoadingSpinner = (
+    <View style={styles.container}>
+      <ActivityIndicator size={55} color="#fff" />
+      <Text>loading store...</Text>
+    </View>
+  );
+
+  const Store = store && (
+    <FlatList
+      style={styles.list}
+      data={store}
+      renderItem={(props) => (
+        <SkinCard {...props} showButtonAdd={false} showButtonRemove={false} />
+      )}
+      keyExtractor={(item) => item.uuid}
+    />
+  );
 
   return (
     <View style={styles.container}>
-      {store && (
-        <FlatList
-          style={styles.list}
-          data={store}
-          renderItem={(props) => (
-            <SkinCard
-              {...props}
-              showButtonAdd={false}
-              showButtonRemove={false}
-            />
-          )}
-          keyExtractor={(item) => item.uuid}
-        />
-      )}
+      <BannerAd
+        unitId={storeAd1}
+        size={BannerAdSize.FULL_BANNER}
+        requestOptions={{ requestNonPersonalizedAdsOnly: true }}
+      />
+      {loading ? LoadingSpinner : Store}
+      <BannerAd
+        unitId={storeAd2}
+        size={BannerAdSize.FULL_BANNER}
+        requestOptions={{ requestNonPersonalizedAdsOnly: true }}
+      />
     </View>
   );
 }

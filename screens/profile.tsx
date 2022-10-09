@@ -7,6 +7,11 @@ import {
 } from 'react-native';
 import { Divider, LinearProgress } from '@rneui/base';
 import { useEffect, useState } from 'react';
+import {
+  BannerAd,
+  BannerAdSize,
+  TestIds,
+} from 'react-native-google-mobile-ads';
 
 import { Text, View } from '../components/Themed';
 import { useAuthStore } from '../store/auth.store';
@@ -27,6 +32,14 @@ type profile = {
   region: string;
 };
 
+const profileAd1 = __DEV__
+  ? TestIds.BANNER
+  : 'ca-app-pub-8907112768449568/1896771803';
+
+const profileAd2 = __DEV__
+  ? TestIds.BANNER
+  : 'ca-app-pub-8907112768449568/8079036779';
+
 export default function ProfileScreen() {
   const puuid = useAuthStore((state) => state.puuid);
   const [profile, setProfile] = useState<profile | null>(null);
@@ -42,20 +55,19 @@ export default function ProfileScreen() {
     (async () => setProfile(await getProfile(puuid!)))();
   }, []);
 
-  if (!profile)
-    return (
-      <View
-        style={[
-          styles.container,
-          { alignItems: 'center', justifyContent: 'center' },
-        ]}
-      >
-        <ActivityIndicator size={55} color="#fff" />
-        <Text>loading profile...</Text>
-      </View>
-    );
+  const LoadingSpinner = (
+    <View
+      style={[
+        styles.container,
+        { alignItems: 'center', justifyContent: 'center' },
+      ]}
+    >
+      <ActivityIndicator size={55} color="#fff" />
+      <Text>loading profile...</Text>
+    </View>
+  );
 
-  return (
+  const Profile = profile && (
     <ScrollView
       style={styles.container}
       refreshControl={
@@ -136,6 +148,22 @@ export default function ProfileScreen() {
         image={require('../assets/images/Radianite_Points.png')}
       />
     </ScrollView>
+  );
+
+  return (
+    <View style={styles.container}>
+      <BannerAd
+        unitId={profileAd1}
+        size={BannerAdSize.FULL_BANNER}
+        requestOptions={{ requestNonPersonalizedAdsOnly: true }}
+      />
+      {!profile ? LoadingSpinner : Profile}
+      <BannerAd
+        unitId={profileAd2}
+        size={BannerAdSize.FULL_BANNER}
+        requestOptions={{ requestNonPersonalizedAdsOnly: true }}
+      />
+    </View>
   );
 }
 

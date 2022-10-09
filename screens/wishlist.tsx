@@ -9,6 +9,11 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import * as SQLite from 'expo-sqlite';
+import {
+  BannerAd,
+  BannerAdSize,
+  TestIds,
+} from 'react-native-google-mobile-ads';
 
 import { Text, View } from '../components/Themed';
 import { useAuthStore } from '../store/auth.store';
@@ -16,6 +21,14 @@ import skin from '../constants/skin';
 import Colors from '../constants/Colors';
 import SkinCard from '../components/card';
 import { useNavigation } from '@react-navigation/native';
+
+const wishlistAd1 = __DEV__
+  ? TestIds.BANNER
+  : 'ca-app-pub-8907112768449568/2076449792';
+
+const wishlistAd2 = __DEV__
+  ? TestIds.BANNER
+  : 'ca-app-pub-8907112768449568/9775261829';
 
 export default function WishListScreen() {
   const navigation = useNavigation();
@@ -77,47 +90,58 @@ export default function WishListScreen() {
     );
   };
 
-  if (loading)
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size={55} color="#fff" />
-        <Text>loading wishlist...</Text>
-      </View>
-    );
+  const LoadingSpinner = (
+    <View style={styles.container}>
+      <ActivityIndicator size={55} color="#fff" />
+      <Text>loading wishlist...</Text>
+    </View>
+  );
+
+  const Wishlist = wishList && (
+    <FlatList
+      style={styles.list}
+      data={wishList}
+      ListEmptyComponent={() => (
+        <Text style={[styles.title, { margin: 20, alignSelf: 'center' }]}>
+          Your Wishlist Is Empty
+        </Text>
+      )}
+      ListFooterComponent={() => (
+        <>
+          <Text style={{ marginVertical: 5 }}>
+            Allow the app to run in the background to function as expected
+            change app battery settings to unrestricted{'   '}
+            <TouchableOpacity onPress={() => Linking.openSettings()}>
+              <Text style={{ color: 'skyblue' }}>open app settings</Text>
+            </TouchableOpacity>
+          </Text>
+        </>
+      )}
+      renderItem={(props) => (
+        <SkinCard
+          {...props}
+          showButtonAdd={false}
+          showButtonRemove={true}
+          onPressRemove={removeWishlistItem}
+        />
+      )}
+      keyExtractor={(item) => item.uuid}
+    />
+  );
 
   return (
     <View style={styles.container}>
-      {wishList && (
-        <FlatList
-          style={styles.list}
-          data={wishList}
-          ListEmptyComponent={() => (
-            <Text style={[styles.title, { margin: 20, alignSelf: 'center' }]}>
-              Your Wishlist Is Empty
-            </Text>
-          )}
-          ListFooterComponent={() => (
-            <>
-              <Text style={{ marginVertical: 5 }}>
-                Allow the app to run in the background to function as expected
-                change app battery settings to unrestricted{'   '}
-                <TouchableOpacity onPress={() => Linking.openSettings()}>
-                  <Text style={{ color: 'skyblue' }}>open app settings</Text>
-                </TouchableOpacity>
-              </Text>
-            </>
-          )}
-          renderItem={(props) => (
-            <SkinCard
-              {...props}
-              showButtonAdd={false}
-              showButtonRemove={true}
-              onPressRemove={removeWishlistItem}
-            />
-          )}
-          keyExtractor={(item) => item.uuid}
-        />
-      )}
+      <BannerAd
+        unitId={wishlistAd1}
+        size={BannerAdSize.FULL_BANNER}
+        requestOptions={{ requestNonPersonalizedAdsOnly: true }}
+      />
+      {loading ? LoadingSpinner : Wishlist}
+      <BannerAd
+        unitId={wishlistAd2}
+        size={BannerAdSize.FULL_BANNER}
+        requestOptions={{ requestNonPersonalizedAdsOnly: true }}
+      />
     </View>
   );
 }

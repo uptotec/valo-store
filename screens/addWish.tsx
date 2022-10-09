@@ -7,15 +7,28 @@ import {
   StyleSheet,
   TextInput,
 } from 'react-native';
-import SkinCard from '../components/card';
 import * as SQLite from 'expo-sqlite';
 import { useNavigation } from '@react-navigation/native';
+import {
+  BannerAd,
+  BannerAdSize,
+  TestIds,
+} from 'react-native-google-mobile-ads';
 
+import SkinCard from '../components/card';
 import { Text, View } from '../components/Themed';
 import Colors from '../constants/Colors';
 import skin from '../constants/skin';
 import useDebounce from '../hooks/UseDebounce';
 import { useAuthStore } from '../store/auth.store';
+
+const addwishAd1 = __DEV__
+  ? TestIds.BANNER
+  : 'ca-app-pub-8907112768449568/1745277301';
+
+const addwishAd2 = __DEV__
+  ? TestIds.BANNER
+  : 'ca-app-pub-8907112768449568/9432195630';
 
 export default function AddWishScreen() {
   const [skins, setSkins] = useState<skin[] | null>(null);
@@ -89,6 +102,11 @@ export default function AddWishScreen() {
 
   return (
     <View style={styles.container}>
+      <BannerAd
+        unitId={addwishAd1}
+        size={BannerAdSize.FULL_BANNER}
+        requestOptions={{ requestNonPersonalizedAdsOnly: true }}
+      />
       <TextInput
         style={styles.input}
         placeholderTextColor="#fff"
@@ -118,6 +136,11 @@ export default function AddWishScreen() {
           maxToRenderPerBatch={10}
         />
       )}
+      <BannerAd
+        unitId={addwishAd2}
+        size={BannerAdSize.FULL_BANNER}
+        requestOptions={{ requestNonPersonalizedAdsOnly: true }}
+      />
     </View>
   );
 }

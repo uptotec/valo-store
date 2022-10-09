@@ -5,6 +5,11 @@ import * as SplashScreen from 'expo-splash-screen';
 import * as TaskManager from 'expo-task-manager';
 import * as Notifications from 'expo-notifications';
 import NetInfo from '@react-native-community/netinfo';
+import {
+  AdEventType,
+  InterstitialAd,
+  TestIds,
+} from 'react-native-google-mobile-ads';
 
 import useCachedResources from './hooks/useCachedResources';
 import Navigation from './navigation';
@@ -31,6 +36,16 @@ Notifications.setNotificationHandler({
   }),
 });
 
+const mainAd = __DEV__
+  ? TestIds.INTERSTITIAL
+  : 'ca-app-pub-8907112768449568/9076972414';
+
+const interstitial = InterstitialAd.createForAdRequest(mainAd, {
+  requestNonPersonalizedAdsOnly: true,
+});
+
+interstitial.load();
+
 export default function App() {
   const isLoadingComplete = useCachedResources();
 
@@ -52,6 +67,11 @@ export default function App() {
     checkBackgroundTaskStatusAsync();
     triggernewStoreNotification();
     prepareApp(setAppIsReady);
+    const un = interstitial.addAdEventListener(AdEventType.LOADED, () => {
+      interstitial.show();
+    });
+
+    return un;
   }, []);
 
   const onLayoutRootView = useCallback(async () => {
